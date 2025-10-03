@@ -130,4 +130,11 @@ public class MaxHeap {
         tracker.incrementArrayAccesses();
         return Arrays.copyOf(heap, size);
     }
+
+    public int getValueAt(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Index out of bounds");
+        }
+        return heap[index];
+    }
 }
