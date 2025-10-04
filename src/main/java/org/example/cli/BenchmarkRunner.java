@@ -11,11 +11,9 @@ import java.util.Random;
 public class BenchmarkRunner {
 
     public static void main(String[] args) {
-        // аргументы: sizes=100,1000,10000,100000 output=benchmark.csv
         int[] sizes = {100, 1000, 10000, 100000};
         String outputFile = "benchmark_results.csv";
 
-        // разбор аргументов
         for (String arg : args) {
             if (arg.startsWith("sizes=")) {
                 sizes = Arrays.stream(arg.substring(6).split(","))
@@ -105,7 +103,6 @@ public class BenchmarkRunner {
         int[] arr = new int[n];
         Random rand = new Random();
 
-        // random
         for (int i = 0; i < n; i++) {
             arr[i] = rand.nextInt();
         }
@@ -124,7 +121,6 @@ public class BenchmarkRunner {
                 break;
             case "nearly-sorted":
                 Arrays.sort(arr);
-                // Перемешиваем 1% элементов
                 int swaps = Math.max(1, n / 100);
                 for (int i = 0; i < swaps; i++) {
                     int a = rand.nextInt(n);

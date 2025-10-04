@@ -19,11 +19,15 @@ public class MaxHeap {
         return size;
     }
 
-    public void insert(int value) {
-        if (size == heap.length) {
+    private void ensureCapacity() {
+        if (size >= heap.length) {
             heap = Arrays.copyOf(heap, heap.length * 2);
             tracker.incrementAllocations();
         }
+    }
+
+    public void insert(int value) {
+        ensureCapacity();
         tracker.incrementArrayAccesses();
         heap[size] = value;
         heapifyUp(size);
@@ -37,10 +41,9 @@ public class MaxHeap {
         int max = heap[0];
 
         tracker.incrementArrayAccesses();
-        tracker.incrementArrayAccesses();
         heap[0] = heap[size - 1];
-
         size--;
+
         heapifyDown(0);
         return max;
     }
@@ -58,66 +61,51 @@ public class MaxHeap {
 
     private void heapifyUp(int index) {
         tracker.updateDepth(1);
+        int current = heap[index];
         while (index > 0) {
             int parent = (index - 1) / 2;
-
-            tracker.incrementArrayAccesses();
-            tracker.incrementArrayAccesses();
             tracker.incrementComparisons();
+            tracker.incrementArrayAccesses();
+            if (current <= heap[parent]) break;
 
-            if (heap[index] > heap[parent]) {
-                swap(index, parent);
-                index = parent;
-            } else {
-                break;
-            }
+            tracker.incrementArrayAccesses();
+            heap[index] = heap[parent];
+            index = parent;
         }
+        tracker.incrementArrayAccesses();
+        heap[index] = current;
     }
 
     private void heapifyDown(int index) {
         tracker.updateDepth(1);
+        int current = heap[index];
+
         while (true) {
             int left = 2 * index + 1;
             int right = 2 * index + 2;
             int largest = index;
 
             if (left < size) {
-                tracker.incrementArrayAccesses();
-                tracker.incrementArrayAccesses();
                 tracker.incrementComparisons();
-                if (heap[left] > heap[largest]) {
-                    largest = left;
-                }
+                tracker.incrementArrayAccesses();
+                if (heap[left] > current) largest = left;
             }
+
             if (right < size) {
-                tracker.incrementArrayAccesses();
-                tracker.incrementArrayAccesses();
                 tracker.incrementComparisons();
-                if (heap[right] > heap[largest]) {
-                    largest = right;
-                }
+                tracker.incrementArrayAccesses();
+                if (heap[right] > heap[largest]) largest = right;
             }
 
-            if (largest != index) {
-                swap(index, largest);
-                index = largest;
-            } else {
-                break;
-            }
+            if (largest == index) break;
+
+            tracker.incrementArrayAccesses();
+            heap[index] = heap[largest];
+            index = largest;
         }
-    }
-
-    private void swap(int i, int j) {
-        tracker.incrementSwaps();
 
         tracker.incrementArrayAccesses();
-        tracker.incrementArrayAccesses();
-        int temp = heap[i];
-        heap[i] = heap[j];
-        heap[j] = temp;
-
-        tracker.incrementArrayAccesses();
-        tracker.incrementArrayAccesses();
+        heap[index] = current;
     }
 
     public int peek() {
@@ -132,9 +120,8 @@ public class MaxHeap {
     }
 
     public int getValueAt(int index) {
-        if (index < 0 || index >= size) {
-            throw new IllegalArgumentException("Index out of bounds");
-        }
+        if (index < 0 || index >= size) throw new IllegalArgumentException("Index out of bounds");
+        tracker.incrementArrayAccesses();
         return heap[index];
     }
 }
