@@ -58,6 +58,14 @@ Metrics CSV includes:
 - `extractMax`: 2,070,200 ns, 231,397 comparisons, 394,773 array accesses
 - `increaseKey`: 713,300 ns, 27,901 comparisons, 80,813 array accesses
 
+## Release Notes (v1.0)
+- Fully implemented Max-Heap with insert, extractMax, increaseKey
+- Integrated PerformanceTracker with detailed metrics
+- Added CLI benchmark and CSV export
+- Covered with comprehensive JUnit5 tests
+- All edge cases fixed
+- Verified asymptotic complexity and empirical benchmarks
+
 ## Conclusion
 - The Max-Heap implementation is **correct, efficient, and scalable**.
 - Empirical benchmarks confirm **O(log n)** behavior for all main operations.
