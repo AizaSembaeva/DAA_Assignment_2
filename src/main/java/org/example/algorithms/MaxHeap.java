@@ -7,9 +7,10 @@ import java.util.Arrays;
 public class MaxHeap {
     private int[] heap;
     private int size;
-    private PerformanceTracker tracker;
+    private final PerformanceTracker tracker;
 
     public MaxHeap(int capacity, PerformanceTracker tracker) {
+        if (capacity <= 0) throw new IllegalArgumentException("Capacity must be positive");
         this.heap = new int[capacity];
         this.size = 0;
         this.tracker = tracker;
@@ -44,15 +45,17 @@ public class MaxHeap {
         heap[0] = heap[size - 1];
         size--;
 
-        heapifyDown(0);
+        if (size > 0) heapifyDown(0);
         return max;
     }
 
     public void increaseKey(int index, int newValue) {
-        if (index < 0 || index >= size) throw new IllegalArgumentException("Index out of bounds");
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
 
         tracker.incrementArrayAccesses();
-        if (newValue < heap[index]) throw new IllegalArgumentException("New value is smaller than current");
+        if (newValue < heap[index])
+            throw new IllegalArgumentException("New value is smaller than current");
 
         tracker.incrementArrayAccesses();
         heap[index] = newValue;
@@ -88,7 +91,7 @@ public class MaxHeap {
             if (left < size) {
                 tracker.incrementComparisons();
                 tracker.incrementArrayAccesses();
-                if (heap[left] > current) largest = left;
+                if (heap[left] > heap[largest]) largest = left;
             }
 
             if (right < size) {
@@ -120,7 +123,8 @@ public class MaxHeap {
     }
 
     public int getValueAt(int index) {
-        if (index < 0 || index >= size) throw new IllegalArgumentException("Index out of bounds");
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         tracker.incrementArrayAccesses();
         return heap[index];
     }

@@ -16,7 +16,6 @@ class MaxHeapTest {
         heap = new MaxHeap(4, tracker);
     }
 
-
     @Test
     void testPeekOnEmptyHeapThrows() {
         assertThrows(IllegalStateException.class, () -> heap.peek());
@@ -29,9 +28,20 @@ class MaxHeapTest {
 
     @Test
     void testIncreaseKeyOnEmptyHeapThrows() {
+        assertThrows(IndexOutOfBoundsException.class, () -> heap.increaseKey(0, 10));
+    }
+
+    @Test
+    void testIncreaseKeyWithLowerValueThrows() {
+        heap.insert(20);
         assertThrows(IllegalArgumentException.class, () -> heap.increaseKey(0, 10));
     }
 
+    @Test
+    void testIncreaseKeyOutOfBoundsThrows() {
+        heap.insert(10);
+        assertThrows(IndexOutOfBoundsException.class, () -> heap.increaseKey(5, 50));
+    }
 
     @Test
     void testSingleInsertAndPeek() {
@@ -53,7 +63,6 @@ class MaxHeapTest {
         heap.increaseKey(0, 20);
         assertEquals(20, heap.peek());
     }
-
 
     @Test
     void testInsertAndExtractMaintainsMaxOrder() {
@@ -90,7 +99,6 @@ class MaxHeapTest {
         assertEquals(50, heap.peek());
     }
 
-
     @Test
     void testHeapExpandsWhenCapacityExceeded() {
         heap.insert(1);
@@ -102,7 +110,6 @@ class MaxHeapTest {
         assertEquals(5, heap.getSize());
         assertEquals(5, heap.peek());
     }
-
 
     @Test
     void testToArrayContainsAllElements() {
